@@ -1,0 +1,146 @@
+version: "3.9"
+
+services:
+
+  # ---------------------------
+  # MongoDB
+  # ---------------------------
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend
+
+  # ---------------------------
+  # Service Découverte
+  # ---------------------------
+  service-decouverte:
+    build: ./service-decouverte
+    container_name: service-decouverte
+    ports:
+      - "4000:4000"
+    networks:
+      - backend
+
+  # ---------------------------
+  # Gateway
+  # ---------------------------
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - service-decouverte
+      - service-user
+      - service-planning
+      - service-forum
+      - service-nutrition
+      - service-event
+      - service-produit
+    networks:
+      - backend
+
+  # ---------------------------
+  # Service Forum
+  # ---------------------------
+  service-forum:
+    build: ./service-forum
+    container_name: service-forum
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/forumdb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  # ---------------------------
+  # Service Planning
+  # ---------------------------
+  service-planning:
+    build: ./service-planning
+    container_name: service-planning
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/planningdb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  # ---------------------------
+  # Service Nutrition
+  # ---------------------------
+  service-nutrition:
+    build: ./service-nutrition
+    container_name: service-nutrition
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/nutritiondb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  # ---------------------------
+  # Service Event
+  # ---------------------------
+  service-event:
+    build: ./service-event
+    container_name: service-event
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/eventdb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  # ---------------------------
+  # Service Produit
+  # ---------------------------
+  service-produit:
+    build: ./service-produit
+    container_name: service-produit
+    ports:
+      - "3004:3004"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/produitdb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+  # ---------------------------
+  # Service User
+  # ---------------------------
+  service-user:
+    build: ./service-user
+    container_name: service-user
+    ports:
+      - "3005:3005"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/userdb
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+
+# ---------------------------
+# Networks & Volumes
+# ---------------------------
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mongo_data:
