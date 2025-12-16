@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - Microservices</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .service-card.nutrition .service-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .service-card.planning .service-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .service-card.forum .service-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .service-card.event .service-icon {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .service-card.produit .service-icon {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .service-card.user .service-icon {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .service-card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .service-port {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-online {
+            background: #28a745;
+        }
+
+        .service-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .endpoint-link {
+            display: block;
+            padding: 12px 20px;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .service-card.planning .endpoint-link {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .service-card.forum .endpoint-link {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .service-card.event .endpoint-link {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .service-card.produit .endpoint-link {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .service-card.user .endpoint-link {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .endpoint-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .gateway-info {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .gateway-info h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .gateway-info a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Tableau de Bord</h1>
+            <p>Gestion des Microservices</p>
+        </div>
+
+        <div class="services-grid">
+            <!-- Service Nutrition -->
+            <div class="service-card nutrition" onclick="openService('nutrition')">
+                <div class="service-icon">🥗</div>
+                <h2>Service Nutrition</h2>
+                <p class="service-port"><span class="status-indicator status-online"></span>Port: 3000</p>
+                <p>Gestion des plans nutritionnels et des repas</p>
+                <a href="http://localhost:5000/service-nutrition/" class="endpoint-link" onclick="event.stopPropagation()">
+                    ➜ Accéder au service
+                </a>
+            </div>
+
+            <!-- Service Planning -->
+            <div class="service-card planning" onclick="openService('planning')">
+                <div class="service-icon">📅</div>
+                <h2>Service Planning</h2>
+                <p class="service-port"><span class="status-indicator status-online"></span>Port: 3001</p>
+                <p>Gestion des plannings et des cours</p>
+                <a href="http://localhost:5000/service-planning/" class="endpoint-link" onclick="event.stopPropagation()">
+                    ➜ Accéder au service
+                </a>
+            </div>
+
+            <!-- Service Forum -->
+            <div class="service-card forum" onclick="openService('forum')">
+                <div class="service-icon">💬</div>
+                <h2>Service Forum</h2>
+                <p class="service-port"><span class="status-indicator status-online"></span>Port: 3003</p>
+                <p>Gestion des blogs, commentaires et notifications</p>
+                <a href="http://localhost:5000/service-forum/" class="endpoint-link" onclick="event.stopPropagation()">
+                    ➜ Accéder au service
+                </a>
+            </div>
+
+            <!-- Service Event -->
+            <div class="service-card event" onclick="openService('event')">
+                <div class="service-icon">🎉</div>
+                <h2>Service Event</h2>
+                <p class="service-port"><span class="status-indicator status-online"></span>Port: 3002</p>
+                <p>Gestion des événements et activités</p>
+                <a href="http://localhost:5000/service-event/" class="endpoint-link" onclick="event.stopPropagation()">
+                    ➜ Accéder au service
+                </a>
+            </div>
+
+            <!-- Service Produit -->
+            <div class="service-card produit" onclick="openService('produit')">
+                <div class="service-icon">📦</div>
+                <h2>Service Product</h2>
+                <p class="service-port"><span class="status-indicator status-online"></span>Port: 3004</p>
+                <p>Gestion du catalogue de produits</p>
+                <a href="http://localhost:5000/service-produit/" class="endpoint-link" onclick="event.stopPropagation()">
+                    ➜ Accéder au service
+                </a>
+            </div>
+
+            <!-- Service User -->
+            <div class="service-card user" onclick="openService('user')">
+                <div class="service-icon">👤</div>
+                <h2>Service User</h2>
+                <p class="service-port"><span class="status-indicator status-online"></span>Port: 3005</p>
+                <p>Gestion des utilisateurs et authentification</p>
+                <a href="http://localhost:5000/service-user/" class="endpoint-link" onclick="event.stopPropagation()">
+                    ➜ Accéder au service
+                </a>
+            </div>
+        </div>
+
+        <div class="gateway-info">
+            <h3>🌐 Gateway API</h3>
+            <p>Point d'entrée unique: <a href="http://localhost:5000">http://localhost:5000</a></p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">6 microservices actifs</p>
+        </div>
+    </div>
+
+    <script>
+        function openService(service) {
+            const urls = {
+                'nutrition': 'http://localhost:5000/service-nutrition/',
+                'planning': 'http://localhost:5000/service-planning/',
+                'forum': 'http://localhost:5000/service-forum/',
+                'event': 'http://localhost:5000/service-event/',
+                'produit': 'http://localhost:5000/service-produit/',
+                'user': 'http://localhost:5000/service-user/'
+            };
+            window.location.href = urls[service];
+        }
+
+        // Vérifier le status des services au chargement
+        window.addEventListener('load', () => {
+            console.log('Tableau de bord chargé - 6 services disponibles via Gateway (port 5000)');
+        });
+    </script>
+</body>
+</html>

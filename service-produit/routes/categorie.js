@@ -1,0 +1,39 @@
+const express = require('express')
+const router = express.Router()
+const Categorie = require("../model/categorie")
+const categorieController = require("../controller/categorieController")
+const { authenticateToken } = require('../middl/authMiddleware');
+
+
+router.get('/categorie', (req, res) => {
+    console.log('categorie route test ok')
+})
+
+router.post("/add",authenticateToken,categorieController.add)
+router.get("/showcategorie",authenticateToken, categorieController.showcategorie)
+router.get("/showcategoriebyid/:id",authenticateToken,categorieController.showcategoriebyid)
+
+router.delete("/deletecategorie/:id", authenticateToken,async (req, res) => {
+    try {
+        await Categorie.findByIdAndDelete(req.params.id);
+        res.status(200).json("categorie supprimée");
+    } catch (err) {
+        console.log(err);
+    }
+})
+
+router.put("/updatecategorie/:id", authenticateToken,async (req, res) => {
+    try {
+        const categorie = await Categorie.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(categorie);
+    } catch (err) {
+        console.log(err);
+    }
+})
+router.get("/filtrer", authenticateToken,categorieController.filtrerEtTrier);
+
+router.get("/verifierProduits/:id",authenticateToken, categorieController.verifierProduits);
+
+router.get("/categorieAvecProduits/:id", authenticateToken,categorieController.getCategorieAvecProduits);
+
+module.exports = router

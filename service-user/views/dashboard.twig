@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sportify</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .header {
+            background: #1db954;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .menu {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .menu a {
+            padding: 10px 20px;
+            background: #1db954;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .menu a:hover {
+            background: #17a34a;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏋️‍♂️ Dashboard Sportify</h1>
+        <p>Service utilisateur - Port 3005</p>
+    </div>
+    
+    <div class="container">
+        <div class="menu">
+            <a href="/">Accueil</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/admin">Admin</a>
+            <a href="/coach">Coach</a>
+            <a href="/test">Test API</a>
+            <a href="/health">Santé</a>
+        </div>
+        
+        <div class="card">
+            <h2>Bienvenue sur votre tableau de bord</h2>
+            <p>Ceci est la page principale de l'application Sportify.</p>
+            <p>Service en cours d'exécution sur le port <strong>3005</strong>.</p>
+            
+            <h3>Informations système :</h3>
+            <ul>
+                <li>Date et heure : {{ "now"|date("Y-m-d H:i:s") }}</li>
+                <li>Service : Utilisateur</li>
+                <li>Port : 3005</li>
+                <li>Statut : ✅ En ligne</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h3>Actions rapides :</h3>
+            <button onclick="testAPI()">Tester l'API</button>
+            <button onclick="checkHealth()">Vérifier la santé</button>
+            <div id="apiResult" style="margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px;"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            try {
+                const response = await fetch('/test');
+                const data = await response.json();
+                document.getElementById('apiResult').innerHTML = 
+                    `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = 
+                    `<p style="color:red;">Erreur: ${error.message}</p>`;
+            }
+        }
+        
+        async function checkHealth() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                document.getElementById('apiResult').innerHTML = 
+                    `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = 
+                    `<p style="color:red;">Erreur: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

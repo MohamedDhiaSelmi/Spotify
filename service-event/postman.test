@@ -1,0 +1,77 @@
+// postman testing file
+
+1. run project: new terminal -> npm run dev
+2. Connect to MongoDB Compass: new connection -> URI: mongodb://127.0.0.1:27017/gymapp
+                                              -> Name: GymApp
+3. Open Postman: URI: http://localhost:3000
+
+--------------------------------------------------- EVENTS ---------------------------------------------------------
+
+--- CREATE EVENT ---
+
+URI: http://localhost:5000/service-event/api/events/addEvent
+Method: POST
+
+raw json:
+    {
+        "title": "Boxing for Beginners",
+        "description": "Gentle stretching session",
+        "date": "2025-12-05T18:00:00.000Z",
+        "capacity": 15,
+        "location": "Room B"
+    }
+
+
+--- GET ALL EVENTS ---
+http://localhost:5000/service-event/api/events/getEvents
+URI: 
+Method: GET
+
+--- GET EVENT BY ID ---
+
+URI: http://localhost:3000/events/getEventById/{{eventId}}
+Method: GET
+
+--- UPDATE EVENT ---
+
+URI: http://localhost:5000/service-event/api/events/updateEvent/69397cf5940163a625fe9f03
+Method: PATCH
+
+raw json:
+    {
+        "location": "Room C"
+    }
+
+--- DELETE EVENT ---
+
+URI: http://localhost:5000/service-event/api/events/deleteEvent/{{eventId}}
+Method: DELETE
+
+
+
+
+--------------------------------------------------- RESERVATIONS ---------------------------------------------------------
+
+
+--- CREATE RESERVATION ---
+
+URI: http://localhost:5000/service-event/api/reservations/addReservation
+Method: POST
+
+raw json:
+    {
+        "event": {{eventId}},
+        "fullName": "Amelia Doe",
+        "email": "amelia@example.com",
+        "phone": "555-111"
+    }
+
+--- GET RESERVATIONS BY EVENT ---
+
+URI: http://localhost:5000/service-event/api/reservations/getReservationsByEvent/{{eventId}}
+Method: GET
+
+--- DELETE RESERVATION ---
+
+URI: http://localhost:3000/reservations/deleteReservation/{{reservationId}}
+Method: DELETE

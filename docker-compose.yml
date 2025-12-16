@@ -1,0 +1,108 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - micro-net
+
+  discovery:
+    build: ./service-decouverte
+    container_name: discovery
+    ports:
+      - "4000:4000"
+    networks:
+      - micro-net
+
+  service-nutrition:
+    build: ./service-nutrition
+    container_name: service-nutrition
+    ports:
+      - "3000:3000"
+    environment:
+      DISCOVERY_URL: "http://discovery:4000/register"
+    depends_on:
+      - discovery
+    networks:
+      - micro-net
+
+  service-planning:
+    build: ./service-planning
+    container_name: service-planning
+    ports:
+      - "3001:3001"
+    environment:
+      DISCOVERY_URL: "http://discovery:4000/register"
+    depends_on:
+      - discovery
+    networks:
+      - micro-net
+  service-forum:
+    build: ./service-forum
+    container_name: service-forum
+    ports:
+      - "3003:3003"
+    environment:
+      DISCOVERY_URL: "http://discovery:4000/register"
+    depends_on:
+      - discovery
+    networks:
+      - micro-net
+  service-event:
+    build: ./service-event
+    container_name: service-event
+    ports:
+      - "3002:3002"
+    environment:
+      DISCOVERY_URL: "http://discovery:4000/register"
+    depends_on:
+      - discovery
+    networks:
+      - micro-net
+  service-produit:
+    build: ./service-produit
+    container_name: service-produit
+    ports:
+      - "3004:3004"
+    environment:
+      DISCOVERY_URL: "http://discovery:4000/register"
+    depends_on:
+      - discovery
+    networks:
+      - micro-net
+  service-user:
+    build: ./service-user
+    container_name: service-user
+    ports:
+      - "3005:3005"
+    environment:
+      DISCOVERY_URL: "http://discovery:4000/register"
+    depends_on:
+      - discovery
+    networks:
+      - micro-net        
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "5000:5000"
+    environment:
+      DISCOVERY_URL: "http://discovery:4000/register"
+    depends_on:
+      - discovery
+      - service-user
+      - service-nutrition
+      - service-planning
+      - service-event
+      - service-forum
+      - service-produit
+
+    networks:
+      - micro-net
+
+networks:
+  micro-net:
+    driver: bridge

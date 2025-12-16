@@ -1,0 +1,51 @@
+{
+  "name": "projectcrud",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "mocha --exit",
+    "mail-test": "node scripts/mailTest.js",
+    "test-brevo": "node scripts/testBrevoConfig.js",
+    "test-password-reset": "node scripts/testPasswordResetEmail.js",
+    "test-auth": "node scripts/testAuth.js",
+    "generate-secrets": "node scripts/generateSecrets.js",
+    "test-routes": "node scripts/testAllRoutes.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^6.11.2",
+    "helmet": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.20.0",
+    "mongoose": "^8.19.0",
+    "nodemon": "^3.1.10",
+    "pdfkit": "^0.15.0",
+    "twig": "^1.17.1",
+    "twilio": "^5.10.5",
+    "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MohamedDhiaSelmi/Spotify.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/MohamedDhiaSelmi/Spotify/issues"
+  },
+  "homepage": "https://github.com/MohamedDhiaSelmi/Spotify#readme",
+  "description": ""
+}
